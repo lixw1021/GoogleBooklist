@@ -46,15 +46,15 @@ public final class QueryUtils {
                 JSONArray authors = volumeInfo.getJSONArray("authors");
                 String author = authors.getString(0);
 
-//                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-//                String imageLink = imageLinks.getString("smallThumbnail");
-//                Bitmap image = getBitmapFromUrl(imageLink);
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                String imageLink = imageLinks.getString("smallThumbnail");
+                Bitmap image = getBitmapFromUrl(imageLink);
 
                 JSONObject searchInfo = currentBook.getJSONObject("searchInfo");
                 String description = searchInfo.getString("textSnippet");
 
-//                books.add(new Book(previewLink, image, bookTitle, author, description));
-                books.add(new Book(bookTitle,author,description));
+                books.add(new Book(previewLink, image, bookTitle, author, description));
+//                books.add(new Book(bookTitle,author,description));
             }
         } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the book volume JSON results", e);
@@ -62,18 +62,18 @@ public final class QueryUtils {
         return books;
     }
 
-//    public static Bitmap getBitmapFromUrl(String imageLink) {
-//        try {
-//            URL url = new URL(imageLink);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoInput(true);
-//            connection.connect();
-//            InputStream input = connection.getInputStream();
-//            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-//            return myBitmap;
-//        } catch (IOException e) {
-//            Log.e("QueryUtils", "Problem parsing the bitmap results", e);
-//            return null;
-//        }
-//    }
+    public static Bitmap getBitmapFromUrl(String imageLink) {
+        try {
+            URL url = new URL(imageLink);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            Log.e("QueryUtils", "Problem parsing the bitmap results", e);
+            return null;
+        }
+    }
 }
