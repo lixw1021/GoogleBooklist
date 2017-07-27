@@ -1,11 +1,15 @@
 package com.example.xianweili.googlebooklist;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -34,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
         bookAdapter = new BookAdapter(this, new ArrayList<Book>());
         listView.setAdapter(bookAdapter);
         new BookAsynchTask().execute(jsonString);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Book currentBook = bookAdapter.getItem(position);
+                Uri bookUri = Uri.parse(currentBook.getPreviewUrl());
+                Intent website = new Intent(Intent.ACTION_VIEW,bookUri);
+                startActivity(website);
+            }
+        });
     }
 
     private class BookAsynchTask extends AsyncTask<String, Void, List<Book>>{

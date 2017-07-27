@@ -20,11 +20,11 @@ import java.util.List;
  */
 
 public final class QueryUtils {
+
     private QueryUtils() {
     }
 
-    String JsonString = "";
-//    Pasing a JSON resonse
+
 
     public static ArrayList<Book> extractBooks (String BooksJSONString) {
         if (BooksJSONString == null) {
@@ -54,7 +54,6 @@ public final class QueryUtils {
                 String description = searchInfo.getString("textSnippet");
 
                 books.add(new Book(previewLink, image, bookTitle, author, description));
-//                books.add(new Book(bookTitle,author,description));
             }
         } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the book volume JSON results", e);

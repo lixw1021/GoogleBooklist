@@ -22,7 +22,7 @@ public class Book {
         this.description = description;
     }
 
-    public String getPreviewUrlUrl() {
+    public String getPreviewUrl() {
         return previewUrl;
     }
 
