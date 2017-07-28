@@ -126,15 +126,31 @@ public final class QueryUtils {
                 String bookTitle = volumeInfo.getString("title");
                 String previewLink = volumeInfo.getString("previewLink");
 
-                JSONArray authors = volumeInfo.getJSONArray("authors");
-                String author = authors.getString(0);
+                String author = null;
+                try {
+                    JSONArray authors = volumeInfo.getJSONArray("authors");
+                    author = authors.getString(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String imageLink = imageLinks.getString("smallThumbnail");
-                Bitmap image = getBitmapFromUrl(imageLink);
+                Bitmap image = null;
+                try {
+                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                    String imageLink = imageLinks.getString("smallThumbnail");
+                    image = getBitmapFromUrl(imageLink);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                JSONObject searchInfo = currentBook.getJSONObject("searchInfo");
-                String description = searchInfo.getString("textSnippet");
+                String description = null;
+                try {
+                    JSONObject searchInfo = currentBook.getJSONObject("searchInfo");
+                    description = searchInfo.getString("textSnippet");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    description = "";
+                }
 
                 books.add(new Book(previewLink, image, bookTitle, author, description));
             }

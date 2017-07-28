@@ -63,8 +63,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Create search URL
     private String createSearchUrl(String inputString) {
-        return url.append("{").append(inputString).append("}").toString();
+        String[] queryStrings= inputString.split(" ");
+        url.append(queryStrings[0]);
+        for( int i = 1; i < queryStrings.length; i++){
+            url.append("+").append(queryStrings[i]);
+        }
+        return url.append("&maxResults=20").toString();
     }
 
     private class BookAsynchTask extends AsyncTask<String, Void, List<Book>>{
