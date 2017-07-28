@@ -2,4 +2,5 @@
     <string name="app_name">Google Booklist</string>
     <string name="book_title">Advanced Android Development</string>
     <string name="book_discription">There are many Android programming guides that give you the basics. This book goes beyond simple apps into many areas of Android development that you simply will not find in competing books. Whether you want to add home screen app widgets to your arsenal, or create more complex maps, integrate multimedia features like the camera, integrate tightly with other applications, or integrate scripting languages, this book has you covered. Moreover, this book has over 50 pages of Honeycomb-sp</string>
+    <string name="empty_list_content">Please check you WI-FI or Cellular Data</string>
 </resources>

@@ -6,38 +6,67 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
->
-
-    <EditText
-        android:id="@+id/search_text"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="12dp"
-        android:layout_weight="3"
-        android:layout_gravity="bottom"
-        />
+        android:layout_marginTop="16dp"
+    >
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="18dp"
-        android:layout_height="40dp"
-        android:layout_weight="1"
-        android:background="@color/colorPrimary"
-        android:text="Search"
-        android:textColor="#ffffff"/>
+        <EditText
+            android:id="@+id/search_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="3"
+            android:layout_gravity="bottom"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="18dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Search"
+            android:textColor="#ffffff"/>
 
-<ListView
-    android:id="@+id/list"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_marginTop="16dp">
+    </LinearLayout>
 
-</ListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressbar_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"/>-->
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp">
+
+        </ListView>
+
+
+        <TextView
+            android:id="@+id/empty_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Google It !"
+            android:textSize="40dp"
+            android:visibility="gone"
+            android:textColor="#00ff00"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/no_data_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--android:text="@string/empty_list_content"/>-->
 
 </LinearLayout>

@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     BookAdapter bookAdapter;
     ListView listView;
     String inputString;
+    View emptyView;
+    View noDataView;
 
     StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
     @Override
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.list);
         bookAdapter = new BookAdapter(this, new ArrayList<Book>());
         listView.setAdapter(bookAdapter);
+
+        emptyView = findViewById(R.id.empty_list);
+//        noDataView = findViewById(R.id.no_data_view);
+        listView.setEmptyView(emptyView);
 
 
         searchButton = (Button) findViewById(R.id.button);
@@ -70,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         for( int i = 1; i < queryStrings.length; i++){
             url.append("+").append(queryStrings[i]);
         }
-        return url.append("&maxResults=20").toString();
+        return url.append("&maxResults=10").toString();
     }
 
     private class BookAsynchTask extends AsyncTask<String, Void, List<Book>>{
