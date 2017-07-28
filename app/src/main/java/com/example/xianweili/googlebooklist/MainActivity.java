@@ -1,19 +1,18 @@
 package com.example.xianweili.googlebooklist;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +23,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
+    Button searchButton;
+    EditText searchText;
     BookAdapter bookAdapter;
     ListView listView;
+    String inputString;
 
-    String url = "https://www.googleapis.com/books/v1/volumes?q={ansys}";
+    StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,19 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.list);
         bookAdapter = new BookAdapter(this, new ArrayList<Book>());
         listView.setAdapter(bookAdapter);
-        new BookAsynchTask().execute(url);
+
+
+        searchButton = (Button) findViewById(R.id.button);
+        searchText = (EditText) findViewById(R.id.search_text);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputString = searchText.getText().toString();
+                String createSearchUrl = createSearchUrl(inputString);
+                new BookAsynchTask().execute(createSearchUrl);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -47,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(website);
             }
         });
+    }
+
+    private String createSearchUrl(String inputString) {
+        return url.append("{").append(inputString).append("}").toString();
     }
 
     private class BookAsynchTask extends AsyncTask<String, Void, List<Book>>{

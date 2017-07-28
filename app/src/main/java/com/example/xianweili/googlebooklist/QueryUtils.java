@@ -3,6 +3,7 @@ package com.example.xianweili.googlebooklist;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -38,6 +39,7 @@ public final class QueryUtils {
         return extractBooks(jsonResponse);
     }
 
+    @Nullable
     private static URL createUrl(String urlString){
         URL url = null;
         try {
