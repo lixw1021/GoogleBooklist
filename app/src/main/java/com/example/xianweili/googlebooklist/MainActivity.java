@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,12 +31,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     EditText searchText;
     BookAdapter bookAdapter;
     ListView listView;
-    String inputString;
+//    String inputString;
     View emptyView;
     View noDataView;
     String createSearchUrl;
 
-    StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inputString = searchText.getText().toString();
+                String inputString = searchText.getText().toString();
                 createSearchUrl = createSearchUrl(inputString);
-                getLoaderManager().initLoader(BOOK_LOADER_ID, null,MainActivity.this);
+                Log.i("LOADER123", createSearchUrl);
+                getLoaderManager().restartLoader(BOOK_LOADER_ID, null,MainActivity.this);
             }
         });
 
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     // Create search URL
     private String createSearchUrl(String inputString) {
+        StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
         String[] queryStrings= inputString.split(" ");
         url.append(queryStrings[0]);
         for( int i = 1; i < queryStrings.length; i++){
@@ -85,11 +87,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
+        Log.i("LOADER123", "onCreateLoader");
         return new BookLoader(this, createSearchUrl);
     }
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
+        Log.i("LOADER123", "onLoadFinished");
         bookAdapter.clear();
         if(books != null && !books.isEmpty()) {
             bookAdapter.addAll(books);
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
+        Log.i("LOADER123", "onLoaderReset");
         bookAdapter.clear();
     }
 }

@@ -2,6 +2,7 @@ package com.example.xianweili.googlebooklist;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
 
     @Override
     protected void onStartLoading() {
+        Log.i("LOADER123", "onStartLoading");
         forceLoad();
     }
 
@@ -29,7 +31,7 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
         if (url == null) {
             return null;
         }
-
+        Log.i("LOADER123", "loadInBackground");
         List<Book> books = QueryUtils.fetchBookDate(url);
         return books;
     }
