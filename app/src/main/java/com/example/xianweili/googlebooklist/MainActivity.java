@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i("LOADER123", "OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         searchButton = (Button) findViewById(R.id.button);
         searchText = (EditText) findViewById(R.id.search_text);
+
+        getLoaderManager().initLoader(BOOK_LOADER_ID, null,this);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
