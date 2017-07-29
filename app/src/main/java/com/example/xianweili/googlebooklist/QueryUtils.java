@@ -62,8 +62,8 @@ public final class QueryUtils {
 
         try {
             connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(15000);
+            connection.setReadTimeout(30000);
+            connection.setConnectTimeout(30000);
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
             connection.connect();

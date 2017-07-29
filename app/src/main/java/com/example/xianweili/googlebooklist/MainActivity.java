@@ -1,6 +1,8 @@
 package com.example.xianweili.googlebooklist;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,9 +22,10 @@ import java.util.List;
  * Created by xianwei li on 7/26/2017.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
     public static final String LOG_TAG = MainActivity.class.getName();
+    private static final int BOOK_LOADER_ID = 1;
     Button searchButton;
     EditText searchText;
     BookAdapter bookAdapter;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     String inputString;
     View emptyView;
     View noDataView;
+    String createSearchUrl;
 
     StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
     @Override
@@ -53,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 inputString = searchText.getText().toString();
-                String createSearchUrl = createSearchUrl(inputString);
-                new BookAsynchTask().execute(createSearchUrl);
+                createSearchUrl = createSearchUrl(inputString);
+                getLoaderManager().initLoader(BOOK_LOADER_ID, null,MainActivity.this);
             }
         });
 
@@ -79,20 +83,21 @@ public class MainActivity extends AppCompatActivity {
         return url.append("&maxResults=10").toString();
     }
 
-    private class BookAsynchTask extends AsyncTask<String, Void, List<Book>>{
+    @Override
+    public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
+        return new BookLoader(this, createSearchUrl);
+    }
 
-        @Override
-        protected List<Book> doInBackground(String... urls) {
-            if (urls.length <1 || urls[0] == null) {
-                return null;
-            }
-            return QueryUtils.fetchBookDate(urls[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<Book> books) {
-            bookAdapter.clear();
+    @Override
+    public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
+        bookAdapter.clear();
+        if(books != null && !books.isEmpty()) {
             bookAdapter.addAll(books);
         }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Book>> loader) {
+        bookAdapter.clear();
     }
 }
