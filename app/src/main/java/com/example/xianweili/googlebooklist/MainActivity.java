@@ -4,11 +4,9 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -32,17 +30,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final String LOG_TAG = MainActivity.class.getName();
     private static final int BOOK_LOADER_ID = 1;
-    Button searchButton;
-    EditText searchText;
-    BookAdapter bookAdapter;
-    ListView listView;
-    TextView emptyView;
-    ProgressBar progressbarView;
-    String createSearchUrl;
+    private Button searchButton;
+    private EditText searchText;
+    private BookAdapter bookAdapter;
+    private ListView listView;
+    private TextView emptyView;
+    private ProgressBar progressbarView;
+    private String createSearchUrl;
+    String Urlpostfix ="&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i("LOADER123", "OnCreate");
         super.onCreate(savedInstanceState);
         setupUI();
     }
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // check internet connectivity
                 ConnectivityManager cm =
                         (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -81,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 progressbarView.setVisibility(View.VISIBLE);
                 String inputString = searchText.getText().toString();
                 createSearchUrl = createSearchUrl(inputString);
-                Log.i("LOADER123", createSearchUrl);
                 getLoaderManager().restartLoader(BOOK_LOADER_ID, null,MainActivity.this);
             }
         });
@@ -105,19 +102,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         for( int i = 1; i < queryStrings.length; i++){
             url.append("+").append(queryStrings[i]);
         }
-        return url.append("&maxResults=10").toString();
+        return url.append(Urlpostfix).toString();
     }
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
-        Log.i("LOADER123", "onCreateLoader");
         return new BookLoader(this, createSearchUrl);
     }
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         progressbarView.setVisibility(View.GONE);
-        Log.i("LOADER123", "onLoadFinished");
         bookAdapter.clear();
         if(books != null && !books.isEmpty()) {
             bookAdapter.addAll(books);
@@ -126,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
-        Log.i("LOADER123", "onLoaderReset");
         bookAdapter.clear();
     }
 }
