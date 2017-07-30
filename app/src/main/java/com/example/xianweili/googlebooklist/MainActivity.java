@@ -1,8 +1,12 @@
 package com.example.xianweili.googlebooklist;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,25 +36,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     EditText searchText;
     BookAdapter bookAdapter;
     ListView listView;
-//    String inputString;
-    View emptyView;
-    View noDataView;
+    TextView emptyView;
+    ProgressBar progressbarView;
     String createSearchUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i("LOADER123", "OnCreate");
         super.onCreate(savedInstanceState);
+        setupUI();
+    }
+
+    private void setupUI() {
         setContentView(R.layout.main_activity);
 
+        progressbarView = (ProgressBar) findViewById(R.id.progressbar_view);
         listView = (ListView) findViewById(R.id.list);
+
         bookAdapter = new BookAdapter(this, new ArrayList<Book>());
         listView.setAdapter(bookAdapter);
 
-        emptyView = findViewById(R.id.empty_list);
-//        noDataView = findViewById(R.id.no_data_view);
+        emptyView = (TextView) findViewById(R.id.empty_list);
+        emptyView.setText(R.string.google_it);
         listView.setEmptyView(emptyView);
-
 
         searchButton = (Button) findViewById(R.id.button);
         searchText = (EditText) findViewById(R.id.search_text);
@@ -59,6 +68,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ConnectivityManager cm =
+                        (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null && activeNetwork.isConnected()) {
+                    emptyView.setText(R.string.google_it);
+                } else {
+                    emptyView.setText(R.string.no_intern);
+                }
+
+                progressbarView.setVisibility(View.VISIBLE);
                 String inputString = searchText.getText().toString();
                 createSearchUrl = createSearchUrl(inputString);
                 Log.i("LOADER123", createSearchUrl);
@@ -96,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
+        progressbarView.setVisibility(View.GONE);
         Log.i("LOADER123", "onLoadFinished");
         bookAdapter.clear();
         if(books != null && !books.isEmpty()) {
