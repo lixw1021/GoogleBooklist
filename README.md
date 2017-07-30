@@ -8,7 +8,7 @@
 
 ##### Tested code for robustness, edge case, and reliability on cellphone and Android VM
 
-###### Please free to comment or ask any quesions below ! 
+###### Please feel free to comment or ask any quesions below ! 
 
 
 Main UI: 
