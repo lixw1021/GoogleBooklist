@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView emptyView;
     private ProgressBar progressbarView;
     private String createSearchUrl;
-    String Urlpostfix ="&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
+    private String Urlpostfix ="&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
