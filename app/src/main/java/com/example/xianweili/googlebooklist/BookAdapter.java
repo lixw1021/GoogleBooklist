@@ -28,29 +28,33 @@ public class BookAdapter extends ArrayAdapter<Book> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.booklist_item, parent, false);
+            holder = new ViewHolder();
+            holder.bookImageView = (ImageView) convertView.findViewById(R.id.book_image);
+            holder.titleView = (TextView) convertView.findViewById(R.id.title_view);
+            holder.authorView = (TextView) convertView.findViewById(R.id.author_view);
+            holder.descriptionView = (TextView) convertView.findViewById(R.id.book_description);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-
         Book currentBook = getItem(position);
 
-        ImageView bookImageView = (ImageView) convertView.findViewById(R.id.book_image);
-        Bitmap bitmap = currentBook.getImage();
-        bookImageView.setImageBitmap(bitmap);
-
-        TextView titleView = (TextView) convertView.findViewById(R.id.title_view);
-        String title = currentBook.getTitle();
-        titleView.setText(title);
-
-        TextView authorView = (TextView) convertView.findViewById(R.id.author_view);
-        String author = currentBook.getAuthor();
-        authorView.setText(author);
-
-        TextView descriptionView = (TextView) convertView.findViewById(R.id.book_description);
-        String description = currentBook.getDescription();
-        descriptionView.setText(description);
+        holder.bookImageView.setImageBitmap(currentBook.getImage());
+        holder.titleView.setText(currentBook.getTitle());
+        holder.authorView.setText(currentBook.getAuthor());
+        holder.descriptionView.setText(currentBook.getDescription());
 
         return convertView;
+    }
+
+    static class ViewHolder {
+        ImageView bookImageView;
+        TextView titleView;
+        TextView authorView;
+        TextView descriptionView;
     }
 
 }
