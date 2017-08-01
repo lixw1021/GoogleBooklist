@@ -30,14 +30,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final String LOG_TAG = MainActivity.class.getName();
     private static final int BOOK_LOADER_ID = 1;
-    private Button searchButton;
     private EditText searchText;
     private BookAdapter bookAdapter;
-    private ListView listView;
     private TextView emptyView;
     private ProgressBar progressbarView;
     private String createSearchUrl;
-    private String Urlpostfix ="&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
+    private final String Urlpostfix = "&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.main_activity);
 
         progressbarView = (ProgressBar) findViewById(R.id.progressbar_view);
-        listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) findViewById(R.id.list);
 
         bookAdapter = new BookAdapter(this, new ArrayList<Book>());
         listView.setAdapter(bookAdapter);
@@ -58,17 +56,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         emptyView.setText(R.string.google_it);
         listView.setEmptyView(emptyView);
 
-        searchButton = (Button) findViewById(R.id.button);
+        Button searchButton = (Button) findViewById(R.id.button);
         searchText = (EditText) findViewById(R.id.search_text);
 
-        getLoaderManager().initLoader(BOOK_LOADER_ID, null,this);
+        getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // check internet connectivity
                 ConnectivityManager cm =
-                        (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.isConnected()) {
                     emptyView.setText(R.string.google_it);
@@ -79,27 +77,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 progressbarView.setVisibility(View.VISIBLE);
                 String inputString = searchText.getText().toString();
                 createSearchUrl = createSearchUrl(inputString);
-                getLoaderManager().restartLoader(BOOK_LOADER_ID, null,MainActivity.this);
+                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
             }
         });
 
+//        open a new website on browser about selected book when click book item
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Book currentBook = bookAdapter.getItem(position);
                 Uri bookUri = Uri.parse(currentBook.getPreviewUrl());
-                Intent website = new Intent(Intent.ACTION_VIEW,bookUri);
+                Intent website = new Intent(Intent.ACTION_VIEW, bookUri);
                 startActivity(website);
             }
         });
     }
 
-    // Create search URL
     private String createSearchUrl(String inputString) {
         StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
-        String[] queryStrings= inputString.split(" ");
+        String[] queryStrings = inputString.split(" ");
         url.append(queryStrings[0]);
-        for( int i = 1; i < queryStrings.length; i++){
+        for (int i = 1; i < queryStrings.length; i++) {
             url.append("+").append(queryStrings[i]);
         }
         return url.append(Urlpostfix).toString();
@@ -114,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         progressbarView.setVisibility(View.GONE);
         bookAdapter.clear();
-        if(books != null && !books.isEmpty()) {
+        if (books != null && !books.isEmpty()) {
             bookAdapter.addAll(books);
         }
     }

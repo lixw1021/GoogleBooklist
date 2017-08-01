@@ -18,14 +18,14 @@ import java.util.ArrayList;
 
 public class BookAdapter extends ArrayAdapter<Book> {
 
-    public BookAdapter (MainActivity mainActivity, ArrayList<Book> books) {
+    public BookAdapter(MainActivity mainActivity, ArrayList<Book> books) {
         super(mainActivity, 0, books);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if(convertView == null) {
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.booklist_item, parent, false);
         }
 

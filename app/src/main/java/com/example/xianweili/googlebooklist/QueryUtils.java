@@ -4,9 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +32,7 @@ public final class QueryUtils {
     private QueryUtils() {
     }
 
-    //  Fetch data from server
+    //  Fetch booklist data from server
     public static List<Book> fetchBookDate(String urlString) {
         URL url = createUrl(urlString);
         String jsonResponse = makeHttpRequest(url);
@@ -38,7 +40,7 @@ public final class QueryUtils {
     }
 
     @Nullable
-    private static URL createUrl(String urlString){
+    private static URL createUrl(String urlString) {
         URL url = null;
         try {
             url = new URL(urlString);
@@ -49,7 +51,7 @@ public final class QueryUtils {
         return url;
     }
 
-    //  Make HTTP request and retrieve JSON string
+    //  Make HTTP request and retrieve JSON string from server
     private static String makeHttpRequest(URL url) {
         InputStream inputStream = null;
         HttpURLConnection connection = null;
@@ -81,7 +83,7 @@ public final class QueryUtils {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "problem with makeHTTPrequest",e);
+                    Log.e(LOG_TAG, "problem with makeHTTPrequest", e);
                 }
             }
 
@@ -107,8 +109,8 @@ public final class QueryUtils {
         return result.toString();
     }
 
-    //  Parse JSON string and get book list
-    private static ArrayList<Book> extractBooks (String BooksJSONString) {
+    //  Parse JSON string to get book list
+    private static ArrayList<Book> extractBooks(String BooksJSONString) {
         if (BooksJSONString == null) {
             return null;
         }
@@ -118,7 +120,7 @@ public final class QueryUtils {
         try {
             JSONObject jsonObject = new JSONObject(BooksJSONString);
             JSONArray jsonArray = jsonObject.getJSONArray("items");
-            for(int i = 0; i < jsonArray.length(); i++) {
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject currentBook = jsonArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
