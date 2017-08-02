@@ -28,7 +28,7 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
         if (url == null) {
             return null;
         }
-        List<Book> books = QueryUtils.fetchBookDate(url);
+        List<Book> books = QueryUtils.fetchBooks(url);
         return books;
     }
 }

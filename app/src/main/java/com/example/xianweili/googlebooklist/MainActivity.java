@@ -60,14 +60,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null && activeNetwork.isConnected()) {
             emptyView.setText(R.string.google_it);
+            progressBarView.setVisibility(View.VISIBLE);
+            String inputString = searchTextView.getText().toString();
+            createSearchUrl = createSearchUrl(inputString);
+            getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
         } else {
+            bookAdapter.clear();
             emptyView.setText(R.string.no_intern);
         }
-
-        progressBarView.setVisibility(View.VISIBLE);
-        String inputString = searchTextView.getText().toString();
-        createSearchUrl = createSearchUrl(inputString);
-        getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
     }
 
     @OnItemClick(R.id.list)
@@ -90,12 +90,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private String createSearchUrl(String inputString) {
         StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
-        String[] queryStrings = inputString.split(" ");
-        url.append(queryStrings[0]);
-        for (int i = 1; i < queryStrings.length; i++) {
-            url.append("+").append(queryStrings[i]);
-        }
-        return url.append(Urlpostfix).toString();
+        return url.append(inputString.replace(" ", "+")).append(Urlpostfix).toString();
     }
 
     @Override

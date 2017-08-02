@@ -33,7 +33,7 @@ public final class QueryUtils {
     }
 
     //  Fetch booklist data from server
-    public static List<Book> fetchBookDate(String urlString) {
+    public static List<Book> fetchBooks(String urlString) {
         URL url = createUrl(urlString);
         String jsonResponse = makeHttpRequest(url);
         return extractBooks(jsonResponse);
@@ -119,38 +119,56 @@ public final class QueryUtils {
 
         try {
             JSONObject jsonObject = new JSONObject(BooksJSONString);
-            JSONArray jsonArray = jsonObject.getJSONArray("items");
+
+            JSONArray jsonArray;
+            if (jsonObject.has("items")) {
+                jsonArray = jsonObject.getJSONArray("items");
+            } else {
+                return null;
+            }
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject currentBook = jsonArray.getJSONObject(i);
-                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
+                JSONObject volumeInfo;
+                String bookTitle;
+                String previewLink;
+                String author;
+                JSONObject imageLinks;
+                Bitmap image;
+                if (currentBook.has("volumeInfo")){
+                    volumeInfo = currentBook.getJSONObject("volumeInfo");
 
-                String bookTitle = volumeInfo.getString("title");
-                String previewLink = volumeInfo.getString("previewLink");
+                    bookTitle = volumeInfo.optString("title");
+                    previewLink = volumeInfo.optString("previewLink");
 
-                String author = null;
-                try {
-                    JSONArray authors = volumeInfo.getJSONArray("authors");
-                    author = authors.getString(0);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    if(volumeInfo.has("authors")) {
+                        JSONArray authors = volumeInfo.getJSONArray("authors");
+                        author = authors.optString(0);
+                    } else {
+                        author = "No author information";
+                    }
+
+                    if(volumeInfo.has("imageLinks")) {
+                        imageLinks = volumeInfo.getJSONObject("imageLinks");
+                        String imageLink = imageLinks.optString("smallThumbnail");
+                        image = getBitmapFromUrl(imageLink);
+                    } else {
+                        image = null;
+                    }
+
+                } else {
+                    bookTitle = null;
+                    author = null;
+                    previewLink = null;
+                    image = null;
                 }
 
-                Bitmap image = null;
-                try {
-                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                    String imageLink = imageLinks.getString("smallThumbnail");
-                    image = getBitmapFromUrl(imageLink);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                String description = null;
-                try {
+                String description;
+                if (currentBook.has("searchInfo")) {
                     JSONObject searchInfo = currentBook.getJSONObject("searchInfo");
-                    description = searchInfo.getString("textSnippet");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    description = "";
+                    description = searchInfo.optString("textSnippet");
+                } else {
+                    description = null;
                 }
 
                 books.add(new Book(previewLink, image, bookTitle, author, description));
@@ -162,6 +180,11 @@ public final class QueryUtils {
     }
 
     private static Bitmap getBitmapFromUrl(String imageLink) {
+
+        if (imageLink == null) {
+            return null;
+        }
+
         try {
             URL url = new URL(imageLink);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
