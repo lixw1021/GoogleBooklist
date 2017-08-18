@@ -14,12 +14,8 @@
 
 [Test:  YouTube Link:](https://youtu.be/SLo48Ghlcmk)
 
-Main UI: 
+
 ![alt text](https://user-images.githubusercontent.com/24383706/28754611-9bd84e46-7516-11e7-95c9-fe3d4c2cea83.JPG )
-
-UI with ListView: 
 ![alt text](https://user-images.githubusercontent.com/24383706/28754610-9bd83834-7516-11e7-8379-671c3b128b46.JPG)
-
-Rotated UI: 
 ![alt text](https://user-images.githubusercontent.com/24383706/28754609-9bd80184-7516-11e7-9d1c-745aa1a89810.JPG)
 
