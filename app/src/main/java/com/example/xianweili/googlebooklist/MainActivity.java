@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int BOOK_LOADER_ID = 1;
     private BookAdapter bookAdapter;
     private String createSearchUrl;
-    private final String Urlpostfix = "&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
+    private final String BASE_URL = "https://www.googleapis.com/books/v1/volumes?q=";
+    private final String URL_POSTFIX = "&maxResults=25&fields=items(volumeInfo/title,volumeInfo/authors,volumeInfo/imageLinks,volumeInfo/previewLink,searchInfo/textSnippet)";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private String createSearchUrl(String inputString) {
-        StringBuilder url = new StringBuilder("https://www.googleapis.com/books/v1/volumes?q=");
-        return url.append(inputString.replace(" ", "+")).append(Urlpostfix).toString();
+        StringBuilder url = new StringBuilder(BASE_URL);
+        return url.append(inputString.replace(" ", "+")).append(URL_POSTFIX).toString();
     }
 
     @Override

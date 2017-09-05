@@ -2,7 +2,7 @@ package com.example.xianweili.googlebooklist;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -10,6 +10,8 @@ import java.util.List;
  */
 
 public class BookLoader extends AsyncTaskLoader<List<Book>> {
+
+    private List<Book> cacheBooks;
 
     private String url;
 
@@ -20,7 +22,10 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
 
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        if (cacheBooks == null || cacheBooks.size() ==0) {
+            forceLoad();
+        }
+
     }
 
     @Override
@@ -30,5 +35,11 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
         }
         List<Book> books = QueryUtils.fetchBooks(url);
         return books;
+    }
+
+    @Override
+    public void deliverResult(List<Book> data) {
+        cacheBooks = data;
+        super.deliverResult(data);
     }
 }
